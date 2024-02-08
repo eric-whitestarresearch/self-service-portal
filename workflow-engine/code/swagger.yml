@@ -41,22 +41,38 @@ components:
         execution_output:
           type: "string"
   parameters:
-    job_id:
-      name: "job_id"
-      description: "The ID of the job that submitted the runner"
+    execution_id:
+      name: "execution_id"
+      description: "The execution ID of the job that submitted the runner"
       in: path
       required: True
       schema:
         type: "string"
 paths:
-  /runner/{job_id}:
+  /runner/dosomething:
+    get:
+      operationId: "runner.do_something"
+      responses:
+        "200":
+          description: "Something happened"
+  /runner/{execution_id}:
+    get:
+      operationId: "runner.get_execution"
+      tags: 
+        - "Runner"
+      summary: Gets the information for a action execution, including parameters and result
+      parameters:
+        - $ref: "#/components/parameters/execution_id"
+      responses:
+        "200":
+          description: "Successfully retrieved the execution information"
     post:
       operationId: "runner.result"
       tags:
         - "Runner"
       summary: "Captures the result of the runner responce"
       parameters:
-        - $ref: "#/components/parameters/job_id"
+        - $ref: "#/components/parameters/execution_id"
       requestBody:
         description: "The result of the runner execution"
         required: true
